@@ -1,3 +1,4 @@
+import 'package:apologinator/pages/apology_screen.dart';
 import 'package:apologinator/services/generate_apology.dart';
 import 'package:flutter/material.dart';
 //import 'generate_apology.dart'; // The file where we wrote the API function
@@ -201,16 +202,13 @@ class _HomePageState extends State<HomePage> {
                               
 
                               // Navigate to the next screen with the generated apology
-                              /*Navigator.push(
+                              Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => ApologyScreen(
                                       apologyMessage: apologyMessage),
                                 ),
-                              );*/
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text(apologyMessage),
-                              ));
+                              );
                               
                             } catch (e) {
                               // Handle any error that occurs during the API call

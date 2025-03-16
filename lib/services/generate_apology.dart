@@ -16,6 +16,7 @@ Future<String> generateApologyMessage(
   "$actionDone". The message should be of $messageLength length.
   The message should be heartfelt and sincere.
   Do not include your name at the end.
+  Ensure that the message is grammatically correct and has no errors.
   ''';
 
   final response = await http.post(
@@ -23,13 +24,14 @@ Future<String> generateApologyMessage(
     headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $apiKey',
+      'Accept': 'application/json; charset=UTF-8'
     },
     body: json.encode({
-      "model": "gpt-4o-mini", // You can use GPT-3 or GPT-4 if available
-      "messages" : [
+      "model": "gpt-4o-mini",
+      "messages": [
         {
-          "role" : "developer",
-          "content" : prompt
+          "role": "user", 
+          "content": prompt
         }
       ],
       "temperature": 0.7,
@@ -41,11 +43,14 @@ Future<String> generateApologyMessage(
 
   // Check if the response is successful
   if (response.statusCode == 200) {
-    // Parse the response and return the generated apology message
-    final Map<String, dynamic> data = json.decode(response.body);
+    // Properly decode UTF-8 response to prevent character encoding issues
+    final String responseBody = utf8.decode(response.bodyBytes);
+    final Map<String, dynamic> data = json.decode(responseBody);
+    // Extract the message content
+    //print(data['choices'][0]['message']['content'].toString().trim());
     return data['choices'][0]['message']['content'].toString().trim();
   } else {
-    // If the request failed, return an error message
+    //print('Error ${response.statusCode}: ${response.body}');
     throw Exception('Failed to generate apology message');
   }
 }
